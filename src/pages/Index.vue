@@ -4,6 +4,7 @@
 
 <script>
 import WaveSurfer from "wavesurfer.js";
+import { EventBus } from "../services/event-bus.js";
 
 export default {
   name: 'PageIndex',
@@ -12,6 +13,10 @@ export default {
   }),
   async mounted() {
     if (!this.wavesurfer) this.createWaveSurfer();
+
+    EventBus.$on("fileChosen", file => {
+      this.loadFile(file);
+    });
   },
   methods: {
     createWaveSurfer() {
@@ -19,9 +24,11 @@ export default {
         container: "#waveform",
         barWidth: 3
       });
-      this.wavesurfer.load(
-        "https://ia902606.us.archive.org/35/items/shortpoetry_047_librivox/song_cjrg_teasdale_64kb.mp3"
-      );
+    },
+    loadFile(file) {
+      if (file.target.files.length == 0) return;
+
+      this.wavesurfer.loadBlob(file.target.files[0]);
     }
   }
 }
