@@ -13,7 +13,7 @@
         </q-btn>
 
         <q-toolbar-title>
-          Quasar App
+          Cool Player
         </q-toolbar-title>
 
         <q-btn color="white" text-color="primary">
