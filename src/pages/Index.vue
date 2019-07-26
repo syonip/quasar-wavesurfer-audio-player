@@ -18,6 +18,7 @@
           size="xl"
           @click="wavesurfer.skipBackward(1)"
         />
+        <q-circular-progress v-if="isLoading" size="72px" indeterminate color="primary" />
         <q-btn
           v-if="isPlaying"
           color="primary"
@@ -27,7 +28,7 @@
           @click="wavesurfer.playPause()"
         />
         <q-btn
-          v-if="!isPlaying"
+          v-if="!isPlaying && !isLoading"
           color="primary"
           round
           icon="play_arrow"
@@ -47,10 +48,6 @@
   </q-page>
 </template>
 
-
-<style>
-</style>
-
 <script>
 import WaveSurfer from "wavesurfer.js";
 import { EventBus } from "../services/event-bus.js";
@@ -58,6 +55,7 @@ import { EventBus } from "../services/event-bus.js";
 export default {
   data: () => ({
     wavesurfer: null,
+    isLoading: false
   }),
   async mounted() {
     EventBus.$on("fileChosen", file => {
@@ -78,6 +76,20 @@ export default {
       this.wavesurfer = WaveSurfer.create({
         container: "#waveform",
         barWidth: 3
+      });
+
+      this.wavesurfer.on("error", err => {
+        console.error(err);
+        this.isLoading = false;
+        this.$q.notify({ message: err });
+      });
+
+      this.wavesurfer.on("loading", () => {
+        this.isLoading = true;
+      });
+
+      this.wavesurfer.on("ready", () => {
+        this.isLoading = false;
       });
     },
     loadFile(file) {
