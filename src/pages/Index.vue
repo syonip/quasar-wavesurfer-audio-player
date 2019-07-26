@@ -75,6 +75,10 @@ export default {
     createWaveSurfer() {
       this.wavesurfer = WaveSurfer.create({
         container: "#waveform",
+        hideScrollbar: true,
+        waveColor: "white",
+        progressColor: "hsla(200, 100%, 30%, 0.5)",
+        cursorColor: "#fff",
         barWidth: 3
       });
 
@@ -102,5 +106,17 @@ export default {
 };
 </script>
 <style>
-
+.controls {
+  background-color: white;
+}
+.audio-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("../assets/audio.jpg") no-repeat center;
+  background-size: cover;
+}
 </style>
